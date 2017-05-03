@@ -13,14 +13,13 @@ import java.util.List;
  */
 public class SensorController {
 
-    private List<Measurement> MeasurementsList = new ArrayList<>();
+    private List<Measurement> measurementsList = new ArrayList<>();
     private String data;
 
     public void startSensor(){
         if(registerSensor()) {
             chooseMeasurements();
             sendMetadata();
-
 
             //noinspection InfiniteLoopStatement
             while(true) run();
@@ -40,8 +39,8 @@ public class SensorController {
         //this function will allows to choose proper measurements
         //in reality it will probably just add all avaible measurements
         Sigar sigar = new Sigar();
-        MeasurementsList.add(new MemoryMeasurement(sigar));
-        MeasurementsList.add(new CpuMeasurement(sigar));
+        measurementsList.add(new MemoryMeasurement(sigar));
+        measurementsList.add(new CpuMeasurement(sigar));
     }
 
     private void sendMetadata(){
@@ -63,10 +62,10 @@ public class SensorController {
     private void prepateMeasurementsData(){
         //in the future this function will probably return Json
         //for now it just gathers all the measurements
-        data="";
-        for (Measurement measurement: MeasurementsList) {
+        data = "";
+        for (Measurement measurement: measurementsList) {
             //noinspection StringConcatenationInLoop
-            data+=measurement.getMeasurementType() + " " + measurement.getActualMeasure() + "\n";
+            data += measurement.getMeasurementType() + " " + measurement.getActualMeasure() + "\n";
         }
 
     }

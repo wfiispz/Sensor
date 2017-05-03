@@ -8,15 +8,16 @@ abstract public class Measurement {
     /**
      * Type of measurement, set by inheriting classes, readonly for user
      */
-    private String MeasurementType;
-    Sigar sigar;
+    private String measurementType;
+    protected Sigar sigar;
 
-    Measurement(String _MeasurementType){
-        MeasurementType=_MeasurementType;
+    Measurement(String _measurementType, Sigar _sigar){
+        measurementType = _measurementType;
+        sigar = _sigar;
     }
 
     String getMeasurementType(){
-        return MeasurementType;
+        return measurementType;
     }
 
     public String getActualMeasure(){return "-1";}

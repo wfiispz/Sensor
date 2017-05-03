@@ -7,18 +7,22 @@ import org.hyperic.sigar.SigarException;
 public class MemoryMeasurement extends Measurement {
     
     MemoryMeasurement(Sigar _sigar){
-        super("Memory measure");
-        sigar = _sigar;
+        super("Memory measure", _sigar);
     }
 
     public String getActualMeasure(){
-        Long value = (long) -1;
+        Long memoryUsageValueBytes = (long) -1;
+        Long memoryUsageValueMegabytes = (long) -1;
+        final Long bytesToKilobytesDivider = 1024L;
+        final Long kilobytesToMegabytesDivider = 1024L;
 
         try {
-            value = sigar.getMem().getActualUsed(); //getActualUsed() returns memory in bytes
-        } catch (SigarException var2) {
-            var2.printStackTrace();
+            memoryUsageValueBytes = sigar.getMem().getActualUsed(); //getActualUsed() returns memory in bytes
+            memoryUsageValueMegabytes = memoryUsageValueBytes / bytesToKilobytesDivider / kilobytesToMegabytesDivider;
+        } catch (SigarException sigarException) {
+            sigarException.printStackTrace();
         }
-        return Long.toString(value  / 1024L / 1024L)  + " MB";
+
+        return Long.toString(memoryUsageValueMegabytes)  + "MB";
     }
 }

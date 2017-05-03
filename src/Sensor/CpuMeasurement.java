@@ -8,22 +8,19 @@ public class CpuMeasurement extends Measurement{
 
 
     CpuMeasurement(Sigar _sigar){
-        super("CPU measure");
-        sigar=_sigar;
-
-
+        super("CPU measure",_sigar);
     }
 
     public String getActualMeasure(){
-        double value=-1;
+        double cpuUsageValue = -1;
 
         try {
-            value = sigar.getCpuPerc().getCombined()*100;
-        } catch (SigarException var2) {
-            var2.printStackTrace();
+            cpuUsageValue = sigar.getCpuPerc().getCombined()*100;
+        } catch (SigarException sigarException) {
+            sigarException.printStackTrace();
         }
 
-        return Double.toString(value)  + " %";
+        return Double.toString(cpuUsageValue)  + " %";
     }
 
 }
