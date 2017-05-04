@@ -20,7 +20,7 @@ public class MemoryMeasurement extends Measurement {
         try {
             Long memoryUsageValueBytes = sigar.getMem().getActualUsed(); //getActualUsed() returns memory in bytes
             Long memoryUsageValueMegabytes = bytesToMegabytes(memoryUsageValueBytes);
-            return Long.toString(memoryUsageValueMegabytes);
+            return Long.toString(memoryUsageValueMegabytes) + "MB";
         } catch (SigarException sigarException) {
             sigarException.printStackTrace();
         }
