@@ -8,7 +8,7 @@ public class CpuMeasurement extends Measurement{
 
 
     CpuMeasurement(Sigar _sigar){
-        super("CPU measure",_sigar);
+        super("CPU measure", _sigar);
     }
 
     public String getActualMeasure(){

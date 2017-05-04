@@ -10,19 +10,21 @@ public class MemoryMeasurement extends Measurement {
         super("Memory measure", _sigar);
     }
 
-    public String getActualMeasure(){
-        Long memoryUsageValueBytes = (long) -1;
-        Long memoryUsageValueMegabytes = (long) -1;
+    private static Long bytesToMegabytes(Long memoryUsageValueBytes){
         final Long bytesToKilobytesDivider = 1024L;
         final Long kilobytesToMegabytesDivider = 1024L;
+        return memoryUsageValueBytes / bytesToKilobytesDivider / kilobytesToMegabytesDivider;
+    }
 
+    public String getActualMeasure(){
         try {
-            memoryUsageValueBytes = sigar.getMem().getActualUsed(); //getActualUsed() returns memory in bytes
-            memoryUsageValueMegabytes = memoryUsageValueBytes / bytesToKilobytesDivider / kilobytesToMegabytesDivider;
+            Long memoryUsageValueBytes = sigar.getMem().getActualUsed(); //getActualUsed() returns memory in bytes
+            Long memoryUsageValueMegabytes = bytesToMegabytes(memoryUsageValueBytes);
+            return Long.toString(memoryUsageValueMegabytes);
         } catch (SigarException sigarException) {
             sigarException.printStackTrace();
         }
 
-        return Long.toString(memoryUsageValueMegabytes)  + "MB";
+        return "Memory measure error";
     }
 }
