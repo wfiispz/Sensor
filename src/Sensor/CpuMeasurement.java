@@ -8,7 +8,8 @@ public class CpuMeasurement extends Measurement{
 
 
     CpuMeasurement(Sigar _sigar){
-        super("CPU measure", _sigar);
+        super( _sigar, "CPU measure", "Percentage");
+        setMeasureMaxValue("100");
     }
 
     public String getActualMeasure(){

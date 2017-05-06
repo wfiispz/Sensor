@@ -7,7 +7,19 @@ import org.hyperic.sigar.SigarException;
 public class MemoryMeasurement extends Measurement {
     
     MemoryMeasurement(Sigar _sigar){
-        super("Memory measure", _sigar);
+
+        super(_sigar,"Memory measure", "Megabytes");
+
+        try{
+            Long memoryTotalValueBytes = sigar.getMem().getTotal();
+            Long memoryTotalValueMegabytes = bytesToMegabytes(memoryTotalValueBytes);
+            setMeasureMaxValue(Long.toString(memoryTotalValueMegabytes));
+        } catch (SigarException sigarException) {
+            sigarException.printStackTrace();
+        }
+
+
+
     }
 
     private static Long bytesToMegabytes(Long memoryUsageValueBytes){
