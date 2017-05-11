@@ -1,19 +1,36 @@
 package Sensor;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
-/**
- * Created by jak12 on 05.05.2017.
- */
+
 public class UDPConnectionController {
 
-    final static int portNumber = 80;
+    private int portNumber = 8001;
+    private InetAddress receiverAddress;
 
-    public UDPConnectionController(){
+    public void setIPAddress(String address){
+        try {
+            receiverAddress = InetAddress.getByName(address);
+        }
+        catch(IOException netException){
+            netException.printStackTrace();
+        }
+    }
+    public void setPortNumber(String _portNumber){
+        try {
+            portNumber = Integer.parseInt(_portNumber);
+        }
+        catch(Exception netException){
+                netException.printStackTrace();
+            }
     }
 
     public boolean sendData(String data){
@@ -21,7 +38,6 @@ public class UDPConnectionController {
 
         try {
             DatagramSocket datagramSocket = new DatagramSocket();
-            InetAddress receiverAddress = InetAddress.getLocalHost();
             DatagramPacket packet = new DatagramPacket(bytesToSend, bytesToSend.length, receiverAddress, portNumber);
             datagramSocket.send(packet);
             return true;

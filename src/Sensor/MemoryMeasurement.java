@@ -8,7 +8,7 @@ public class MemoryMeasurement extends Measurement {
     
     MemoryMeasurement(Sigar _sigar){
 
-        super(_sigar,"Memory measure", "Megabytes");
+        super(_sigar,"MemoryUsage", "Megabytes");
 
         try{
             Long memoryTotalValueBytes = sigar.getMem().getTotal();
@@ -32,7 +32,7 @@ public class MemoryMeasurement extends Measurement {
         try {
             Long memoryUsageValueBytes = sigar.getMem().getActualUsed(); //getActualUsed() returns memory in bytes
             Long memoryUsageValueMegabytes = bytesToMegabytes(memoryUsageValueBytes);
-            return Long.toString(memoryUsageValueMegabytes) + "MB";
+            return Long.toString(memoryUsageValueMegabytes);
         } catch (SigarException sigarException) {
             sigarException.printStackTrace();
         }

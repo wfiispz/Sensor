@@ -8,7 +8,7 @@ public class CpuMeasurement extends Measurement{
 
 
     CpuMeasurement(Sigar _sigar){
-        super( _sigar, "CPU measure", "Percentage");
+        super( _sigar, "CpuUsage", "Percentage");
         setMeasureMaxValue("100");
     }
 
@@ -21,7 +21,7 @@ public class CpuMeasurement extends Measurement{
             sigarException.printStackTrace();
         }
 
-        return Double.toString(cpuUsageValue)  + " %";
+        return Double.toString(cpuUsageValue);
     }
 
 }
