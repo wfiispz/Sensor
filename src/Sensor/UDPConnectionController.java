@@ -21,30 +21,35 @@ public class UDPConnectionController {
             receiverAddress = InetAddress.getByName(address);
         }
         catch(IOException netException){
+            netException.getMessage();
             netException.printStackTrace();
         }
     }
+
     public void setPortNumber(String _portNumber){
         try {
             portNumber = Integer.parseInt(_portNumber);
         }
         catch(Exception netException){
-                netException.printStackTrace();
-            }
+            netException.getMessage();
+            netException.printStackTrace();
+        }
     }
 
-    public boolean sendData(String data){
+    public void sendData(String data){
         byte[] bytesToSend = data.getBytes(Charset.forName("UTF-8"));
 
         try {
             DatagramSocket datagramSocket = new DatagramSocket();
             DatagramPacket packet = new DatagramPacket(bytesToSend, bytesToSend.length, receiverAddress, portNumber);
             datagramSocket.send(packet);
-            return true;
+            return;
         }
         catch(IOException netException){
+            netException.getMessage();
             netException.printStackTrace();
         }
-        return false;
+
+        System.out.println("Problem with udp connection, data not send");
     }
 }

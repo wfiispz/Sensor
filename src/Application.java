@@ -10,10 +10,6 @@ public class Application {
         SensorController sensor = new SensorController();
         sensor.startSensor();
 
-        //Sensor.UDPConnectionController udpClient;
-        //udpClient = new UDPConnectionController();
-        //udpClient.sendData("12");
-
     }
 
 }

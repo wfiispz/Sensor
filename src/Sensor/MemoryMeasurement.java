@@ -9,17 +9,18 @@ public class MemoryMeasurement extends Measurement {
     MemoryMeasurement(Sigar _sigar){
 
         super(_sigar,"MemoryUsage", "Megabytes");
+        setMeasureMaxValue(calculateMaxValue());
+    }
 
+    String calculateMaxValue(){
         try{
             Long memoryTotalValueBytes = sigar.getMem().getTotal();
             Long memoryTotalValueMegabytes = bytesToMegabytes(memoryTotalValueBytes);
-            setMeasureMaxValue(Long.toString(memoryTotalValueMegabytes));
+            return Long.toString(memoryTotalValueMegabytes);
         } catch (SigarException sigarException) {
             sigarException.printStackTrace();
         }
-
-
-
+        return "Error while calculating max value";
     }
 
     private static Long bytesToMegabytes(Long memoryUsageValueBytes){

@@ -34,7 +34,7 @@ public class SensorController {
 
     private JSONObject dataForMonitor = new JSONObject();
     private JSONArray measuresJsonArray = new JSONArray();
-    private String resourceID = "";
+    private String resourceID = UUID.randomUUID().toString();
     private String hostname = "";
     private String hostDescription = "";
 
@@ -42,7 +42,7 @@ public class SensorController {
     private UDPConnectionController udpController = new UDPConnectionController();
     private List<Measurement> measurementsList = new ArrayList<>();
 
-    private Sigar sigar;
+    private Sigar sigar = new Sigar(); ;
 
     public void startSensor(){
         configureSensor();
@@ -50,25 +50,16 @@ public class SensorController {
         //noinspection InfiniteLoopStatement
         while(true) {
             sendMetadata();
-            try {
-                Thread.sleep(1000);
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            for(int i=0; i<10; ++i)
+            waitOneSecond();
+
+            for(int i = 0; i < 10; ++i)
                 run();
         }
-
     }
-
-
 
     private void configureSensor(){
         getHostInformationFromUser();
         getMonitorAdressFromUser();
-
-        sigar = new Sigar();
-        resourceID = UUID.randomUUID().toString();
 
         chooseMeasurements();
     }
@@ -97,13 +88,7 @@ public class SensorController {
         prepareMeasurementsData();
         udpController.sendData(dataForMonitor.toJSONString());
 
-        /// This will be probably changed to ScheduledExecutor
-        try {
-            Thread.sleep(1000);
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
+        waitOneSecond();
     }
 
     private void sendMetadata(){
@@ -135,9 +120,6 @@ public class SensorController {
         measureMetadata.put(MAX_VALUE_KEY, measurement.getMeasureMaxValue());
         return measureMetadata;
     }
-
-
-
 
     private void prepareMeasurementsData(){
         cleanDataJson();
@@ -172,5 +154,13 @@ public class SensorController {
         return measureData;
     }
 
+    void waitOneSecond(){
+        /// This will probably be moved to utility class in the future
+        try {
+            Thread.sleep(1000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
 
 }

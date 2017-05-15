@@ -29,15 +29,16 @@ abstract public class Measurement {
         return measurementType;
     }
 
-    public String getActualMeasure(){
-        return "-1";
-    }
+    public abstract String getActualMeasure();
+
     public String getMeasureUnit(){
         return measureUnit;
     }
+
     public String getMeasureID(){
         return measureID;
     }
+
     public String getMeasureMaxValue() {
         return measureMaxValue;
     }
