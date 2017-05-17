@@ -6,11 +6,11 @@ import org.hyperic.sigar.SigarException;
 
 public class CpuMeasurement extends Measurement{
 
-    final static String MAX_MEASURE_VALUE = "100";
+    final static String MAX_PERCENTAGE_MEASURE_VALUE = "100";
 
     CpuMeasurement(Sigar _sigar){
         super( _sigar, "CpuUsage", "Percentage");
-        setMeasureMaxValue(MAX_MEASURE_VALUE);
+        setMeasureMaxValue(MAX_PERCENTAGE_MEASURE_VALUE);
     }
 
     public String getActualMeasure(){
@@ -19,7 +19,7 @@ public class CpuMeasurement extends Measurement{
         try {
             cpuUsageValue = sigar.getCpuPerc().getCombined()*100;
         } catch (SigarException sigarException) {
-            sigarException.getMessage();
+            System.out.println(sigarException.getMessage());
             sigarException.printStackTrace();
         }
 

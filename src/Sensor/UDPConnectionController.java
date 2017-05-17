@@ -21,7 +21,7 @@ public class UDPConnectionController {
             receiverAddress = InetAddress.getByName(address);
         }
         catch(IOException netException){
-            netException.getMessage();
+            System.out.println(netException.getMessage());
             netException.printStackTrace();
         }
     }
@@ -31,7 +31,7 @@ public class UDPConnectionController {
             portNumber = Integer.parseInt(_portNumber);
         }
         catch(Exception netException){
-            netException.getMessage();
+            System.out.println(netException.getMessage());
             netException.printStackTrace();
         }
     }
@@ -46,7 +46,7 @@ public class UDPConnectionController {
             return;
         }
         catch(IOException netException){
-            netException.getMessage();
+            System.out.println(netException.getMessage());
             netException.printStackTrace();
         }
 
