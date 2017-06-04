@@ -4,7 +4,10 @@ package Sensor;
 import org.hyperic.sigar.Sigar;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
+
+import java.io.FileReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,6 +35,12 @@ public class SensorController {
 
     private final static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
+    private final static String CONFIG_FILE = "configuration.json";
+    private final static String HOSTNAME_KEY = "hostname";
+    private final static String HOST_DESCRIPTION_KEY = "hostDescription";
+    private final static String MONITOR_IP_KEY = "monitorIP";
+    private final static String MONITOR_PORT_KEY = "monitorPortNumber";
+
     private JSONObject dataForMonitor = new JSONObject();
     private JSONArray measuresJsonArray = new JSONArray();
     private String resourceID = UUID.randomUUID().toString();
@@ -42,7 +51,7 @@ public class SensorController {
     private UDPConnectionController udpController = new UDPConnectionController();
     private List<Measurement> measurementsList = new ArrayList<>();
 
-    private Sigar sigar = new Sigar(); ;
+    private Sigar sigar = new Sigar();
 
     public void startSensor(){
         configureSensor();
@@ -57,10 +66,30 @@ public class SensorController {
         }
     }
 
-    private void configureSensor(){
-        getHostInformationFromUser();
-        getMonitorAdressFromUser();
+    private boolean readConfigFromFile(){
+        JSONParser parser = new JSONParser();
 
+        try {
+            JSONObject configJSON = (JSONObject) parser.parse(new FileReader(CONFIG_FILE));
+            hostname = (String) configJSON.get(HOSTNAME_KEY);
+            hostDescription = (String) configJSON.get(HOST_DESCRIPTION_KEY);
+            udpController.setIPAddress((String) configJSON.get(MONITOR_IP_KEY));
+            udpController.setPortNumber((String) configJSON.get(MONITOR_PORT_KEY));
+        }
+        catch (Exception configException){
+            System.out.println(configException.getMessage());
+            configException.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void configureSensor(){
+        if(!readConfigFromFile()) { //let the user enter config data if config file is absent or broken
+            getHostInformationFromUser();
+            getMonitorAdressFromUser();
+        }
         chooseMeasurements();
     }
     
@@ -82,6 +111,7 @@ public class SensorController {
     private void chooseMeasurements(){
         measurementsList.add(new MemoryMeasurement(sigar));
         measurementsList.add(new CpuMeasurement(sigar));
+        measurementsList.add(new DiskMeasurement(sigar));
     }
 
     private void run(){
@@ -155,7 +185,6 @@ public class SensorController {
     }
 
     void waitOneSecond(){
-        /// This will probably be moved to utility class in the future
         try {
             Thread.sleep(1000);
         } catch(InterruptedException ex) {
